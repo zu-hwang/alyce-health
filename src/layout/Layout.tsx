@@ -6,11 +6,19 @@ interface ILayout {
 }
 const Layout = ({ children }: ILayout) => {
   return (
-    <div>
-      <div>해더: 로그인 or 로그아웃/즐겨찾기</div>
-      <div>{children} </div>
-    </div>
+    <Container>
+      <Header>해더: 로그인 or 로그아웃/즐겨찾기</Header>
+      <Main>{children}</Main>
+    </Container>
   );
 };
+
+const Container = styled.header`
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: ${({ theme }) => theme.mainBackground};
+`;
+const Header = styled.header``;
+const Main = styled.main``;
 
 export default Layout;

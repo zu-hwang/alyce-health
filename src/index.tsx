@@ -1,10 +1,22 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Routes from 'src/Routes';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
+import configureStore from 'store/configureStore';
+import Routes from 'Routes';
+import theme from 'styles/theme';
+import GlobalStyle from 'styles/GlobalStyle';
+
+const store = configureStore();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routes />
+    <Provider store={store}>
+      <ThemeProvider theme={theme.light}>
+        <GlobalStyle />
+        <Routes />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
