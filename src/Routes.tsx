@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from 'src/components/Home';
-import GlobalStyle from 'src/styles/globalStyle';
+
+// import {} from 'redux';
+import Home from 'components/Home';
 
 const Routes = () => {
   return (
     <Router>
-      <GlobalStyle />
       <Switch>
         <Route exact path="/" component={Home}></Route>
         {/* <Route exact path="/BookMark" component={BookMark}></Route> */}

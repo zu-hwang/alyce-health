@@ -10,7 +10,6 @@ const pointColor = {
 export const theme = {
   dark: {
     mainBackground: `#333`,
-    // neutral color
     title: `rgba(255,255,255,0.9)`,
     primaryText: `rgba(255,255,255,0.8)`,
     secondaryText: `rgba(255,255,255,0.45)`,
@@ -27,7 +26,6 @@ export const theme = {
   },
   light: {
     mainBackground: `#fff`,
-    // neutral color
     title: `rgba(0, 0, 0, 0.9)`,
     primaryText: `rgba(0, 0, 0, 0.8)`,
     secondaryText: `rgba(0, 0, 0, 0.45)`,
