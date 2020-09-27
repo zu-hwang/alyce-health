@@ -12,7 +12,7 @@ const store = configureStore();
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme.light}>
+      <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Routes />
       </ThemeProvider>

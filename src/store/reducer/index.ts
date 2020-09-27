@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
 
 import * as account from './account';
-import * as search from './search';
+import * as home from './home';
 
 export interface IRootState {
   account: account.IAccount;
-  search: search.ISearch;
+  home: home.IHome;
 }
 const rootReducer = combineReducers({
   account: account.default,
-  search: search.default,
+  home: home.default,
 });
 
 export default rootReducer;

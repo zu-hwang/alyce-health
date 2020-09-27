@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body, h1, h2, h3, h4, h5, h6, p, span, div, article, nav ,input, label, button {
   font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+  font-size:14px;
   }
   a {
     color: inherit;
