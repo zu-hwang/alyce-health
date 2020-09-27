@@ -17,7 +17,7 @@ const Home = () => {
   const page = useSelector((s) => s.home.page);
   const newsList = useSelector((s) => s.home.newsList);
   React.useEffect(() => {
-    if (!newsList) dispatch(home.requestNews({ page })); // 첫 로딩일때
+    if (newsList.length === 0) dispatch(home.requestNews({ page })); // 첫 로딩일때
     const onScrollDown = () => {
       if (newsList && newsList.length > 0 && newsList.length < totalCount) {
         if (
@@ -34,7 +34,7 @@ const Home = () => {
     return () => {
       window && window.removeEventListener('scroll', onScrollDown);
     };
-  }, [newsList, dispatch, page, totalCount, searchInput]);
+  }, [newsList /* , dispatch, page, totalCount, searchInput */]);
   return (
     <Layout>
       <CenterBox>
