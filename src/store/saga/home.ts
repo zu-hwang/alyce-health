@@ -14,7 +14,7 @@ function* requestNews(action: ReturnType<typeof home.requestNews>) {
       yield put(home.setPage(action.payload.page || 1));
     }
     const result = yield call(API.news, action.payload);
-    // console.log({ result });
+    console.log({ result });
     // console.log({ 아티클: result.data.articles });
     yield put(home.setTotalCount(result.data.totalResults));
     yield put(home.setNews(result.data.articles));

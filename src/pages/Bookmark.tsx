@@ -16,7 +16,7 @@ const BookMark = () => {
   return (
     <Layout>
       <CenterBox>
-        {bookmark &&
+        {bookmark.length > 0 &&
           (bookmark as home.IActicle[]).map((news) => (
             <NewsWrapper key={news.id}>
               <NewsCard
@@ -25,7 +25,9 @@ const BookMark = () => {
               />
             </NewsWrapper>
           ))}
-        {!username && bookmark && <Text>로그인 후 이용할 수 있습니다.</Text>}
+        {!username && bookmark.length > 0 && (
+          <Text>로그인 후 이용할 수 있습니다.</Text>
+        )}
         {username && bookmark.length === 0 && (
           <Text>검색한 뉴스를 북마크 하세요!</Text>
         )}
