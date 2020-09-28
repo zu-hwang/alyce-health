@@ -129,7 +129,7 @@ const bmk = (state: IBMK = initState, action: EditAction) => {
         const user = action.payload;
         const bookmarkJson = localStorage.getItem(`bookmarkAUD${user}`);
         const bookmark = bookmarkJson && JSON.parse(bookmarkJson);
-        draft.bookmark = bookmark;
+        if (bookmark) draft.bookmark = bookmark;
         break;
       case SET_EDIT_NEWS_ID:
         draft.editNewsId = action.payload;
@@ -157,7 +157,8 @@ const bmk = (state: IBMK = initState, action: EditAction) => {
         saveBookmarkLS(action.payload.username);
         break;
       case RESET:
-        draft = initState;
+        draft.editNewsId = initState.editNewsId;
+        draft.bookmark = initState.bookmark;
         break;
     }
   });

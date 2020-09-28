@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as account from 'store/reducer/account';
 import * as home from 'store/reducer/home';
+import * as bmk from 'store/reducer/bmk';
 import styled from 'styled-components';
 import Button from 'components/ui/Button';
 import { Link } from 'react-router-dom';
@@ -11,8 +12,9 @@ import { useDispatch, useSelector } from 'hooks/customRedux';
 const LogoutFormAndNav = () => {
   const dispatch = useDispatch();
   const username = useSelector((s) => s.account.username);
-  const onClickLogin = (): void => {
-    dispatch(account.logout());
+  const onClickLogout = (): void => {
+    dispatch(account.reset());
+    dispatch(bmk.reset());
     dispatch(home.reset());
   };
   return (
@@ -34,7 +36,7 @@ const LogoutFormAndNav = () => {
           </li>
         </ul>
       </Nav>
-      <Button onClick={onClickLogin}>로그아웃</Button>
+      <Button onClick={onClickLogout}>로그아웃</Button>
     </Container>
   );
 };

@@ -11,6 +11,7 @@ const BookMark = () => {
   const isBookmark = React.useMemo(() => {
     return bookmark.length > 0;
   }, [bookmark]);
+  React.useEffect(() => {}, [bookmark]);
   return (
     <Layout>
       <CenterBox>

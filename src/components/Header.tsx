@@ -75,9 +75,7 @@ const Header = () => {
             <Title>{currentPath.slice(1)}</Title>
           )}
           <IconWrapper hover={true}>
-            {menubar && (
-              <Icon icon={faWindowMinimize} size={'lg'} onClick={onClickIcon} />
-            )}
+            {menubar && <Icon icon={faWindowMinimize} onClick={onClickIcon} />}
             {!menubar && (
               <Icon icon={faBars} size={'lg'} onClick={onClickIcon} />
             )}
@@ -145,6 +143,7 @@ const IconWrapper = styled.div<{ hover?: boolean }>`
   ${css.flexCenter}
   position:relative;
   top: 0;
+  max-height: 59px;
   color: ${({ theme }) => theme.primaryText};
   padding: ${({ theme }) => theme.unit.gut + 'px'};
   transition: 0.2s ease-in-out color;
