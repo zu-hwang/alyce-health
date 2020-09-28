@@ -11,6 +11,8 @@ const Routes = () => {
       <Switch>
         <Route exact path="/" component={Home}></Route>
         <Route exact path="/bookmark" component={Bookmark}></Route>
+        {/* 뉴스 상세보기 */}
+        {/* 뉴스 수정 */}
       </Switch>
     </Router>
   );

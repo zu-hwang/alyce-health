@@ -34,6 +34,7 @@ const Home = () => {
     return () => {
       window && window.removeEventListener('scroll', onScrollDown);
     };
+    // eslint-disable-next-line
   }, [newsList /* , dispatch, page, totalCount, searchInput */]);
   return (
     <Layout>
