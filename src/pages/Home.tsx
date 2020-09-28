@@ -19,7 +19,7 @@ const Home = () => {
   React.useEffect(() => {
     if (newsList.length === 0) dispatch(home.requestNews({ page })); // 첫 로딩일때
     const onScrollDown = () => {
-      if (newsList && newsList.length > 0 && newsList.length < totalCount) {
+      if (newsList.length > 0 && newsList.length < totalCount) {
         if (
           window.scrollY + document.documentElement.clientHeight >
           document.documentElement.scrollHeight - 100
@@ -34,6 +34,7 @@ const Home = () => {
     return () => {
       window && window.removeEventListener('scroll', onScrollDown);
     };
+    // eslint-disable-next-line
   }, [newsList /* , dispatch, page, totalCount, searchInput */]);
   return (
     <Layout>

@@ -1,131 +1,74 @@
 import produce from 'immer';
-import * as home from './home';
-/**
- * 로그인
- * 로그아웃
- * 셋팅_유저정보
- * 셋팅_북마크
- */
+
+// LOGIN: 패치안함으로 XX
+// LOGOUT : 사가 액션 => 전체 스토어 리셋
+// RESET : 리셋 : account 스토어 리셋
+// LOAD_LS_USER : 로컬스토리지 데이터 로드
+// SET_USER : 로그인 후 유저정보 업데이트
+
 export const LOGOUT = 'account/LOGOUT';
+export const RESET = 'account/RESET';
 export const SET_USER = 'account/SET_USER';
-export const SET_MY_BOOKMARKS = 'account/SET_MY_BOOKMARKS';
-export const LOAD_LOCALSTORAGE = 'account/LOAD_LOCALSTORAGE';
-export const ADD_BOOKMARK = 'account/ADD_BOOKMARK';
-export const DEL_BOOKMARK = 'account/DEL_BOOKMARK';
-/**
- * 로그인 : 패치안함으로 XX
- * 로그아웃
- */
-export const logout = (): { type: typeof LOGOUT } => ({ type: LOGOUT });
+export const LOAD_LS_USER = 'account/LOAD_LS_USER';
 
 /**
- * 유저정보 저장 & ㅋ
+ * 로그아웃 사가액션 : 전체 스토어 리셋 및 로컬스토리지 유저정보 제거
+ */
+export const logout = (): { type: typeof LOGOUT } => ({ type: LOGOUT });
+/**
+ * account스토어 리셋
+ */
+export const reset = (): { type: typeof RESET } => ({ type: RESET });
+/**
+ * 로컬스토리지 유저정보 로드
+ */
+export const loadLSUser = (): { type: typeof LOAD_LS_USER } => {
+  return {
+    type: LOAD_LS_USER,
+  };
+};
+/**
+ * 로그인 후 유저정보 업데이트
+ * @param username : 로그인 유저ID
  */
 export const setUser = (
   username: string
-): { type: typeof SET_USER; payload: string } => ({
-  type: SET_USER,
-  payload: username,
-});
+): { type: typeof SET_USER; payload: string } => {
+  return {
+    type: SET_USER,
+    payload: username,
+  };
+};
 
-export const loadLS = (): { type: typeof LOAD_LOCALSTORAGE } => ({
-  type: LOAD_LOCALSTORAGE,
-});
-/**
- * 유저의 북마크 리스트 전체
- */
-export type IBookmarkList = home.IActicle[];
-export const setBookmarkList = (
-  bookmarkList: IBookmarkList
-): {
-  type: typeof SET_MY_BOOKMARKS;
-  payload: IBookmarkList;
-} => ({
-  type: SET_MY_BOOKMARKS,
-  payload: bookmarkList,
-});
-
-/**
- * 북마크 추가 제거
- */
-export const addBookmark = (
-  news: home.IActicle
-): { type: typeof ADD_BOOKMARK; payload: home.IActicle } => ({
-  type: ADD_BOOKMARK,
-  payload: news,
-});
-export const delBookmark = (
-  id: string
-): { type: typeof DEL_BOOKMARK; payload: string } => ({
-  type: DEL_BOOKMARK,
-  payload: id,
-});
-
-/**
- * 액션 타입 정의
- */
 export type AccountAction =
-  | ReturnType<typeof logout>
-  | ReturnType<typeof loadLS>
-  | ReturnType<typeof setUser>
-  | ReturnType<typeof addBookmark>
-  | ReturnType<typeof delBookmark>
-  | ReturnType<typeof setBookmarkList>;
+  | ReturnType<typeof reset>
+  | ReturnType<typeof loadLSUser>
+  | ReturnType<typeof setUser>;
 /**
- * 스토어 초기값 설정 + 타입 정의
+ * account 스토어 타입
+ * @param username: string;
  */
-
 export interface IAccount {
-  username: string | null;
-  bookmark: home.IActicle[] | [];
+  username: string;
 }
 const initState: IAccount = {
-  username: null,
-  bookmark: [],
+  username: '',
 };
-/** 리듀서 작성 */
-
 const account = (state: IAccount = initState, action: AccountAction) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      case LOAD_LOCALSTORAGE:
+      case LOAD_LS_USER:
         const username = localStorage.getItem('AUD');
-        const bookmarkOrigin = localStorage.getItem(
-          `bookmarkAUD${draft.username}`
-        );
-        const bookmark = bookmarkOrigin && JSON.parse(bookmarkOrigin);
-        if (username) draft.username = username;
-        if (bookmark && bookmark.length > 0) draft.bookmark = bookmark;
+        draft.username = username || '';
         break;
-      case LOGOUT:
+      case RESET:
         draft.username = initState.username;
-        draft.bookmark = initState.bookmark;
         if (window) localStorage.removeItem('AUD');
         break;
       case SET_USER:
         draft.username = action.payload;
-        if (window && action.payload) {
+        if (window && action.payload)
           localStorage.setItem('AUD', action.payload);
-        }
-        break;
-      case ADD_BOOKMARK:
-        // 최 상위에 목록 추가
-        (draft.bookmark as home.IActicle[]).unshift(action.payload);
-        // 로컬스토리지 저장
-        if (window)
-          localStorage.setItem(
-            `bookmarkAUD${draft.username}`,
-            JSON.stringify(draft.bookmark)
-          );
-        break;
-      case DEL_BOOKMARK:
-        const id = action.payload;
-        draft.bookmark = draft.bookmark.filter((news, index) => news.id !== id);
-        if (window)
-          localStorage.setItem(
-            `bookmarkAUD${draft.username}`,
-            JSON.stringify(draft.bookmark)
-          );
         break;
     }
   });

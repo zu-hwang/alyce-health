@@ -1,9 +1,6 @@
 import produce from 'immer';
 import { v4 as uuidv4 } from 'uuid';
-/**
- * 검색 -> 사가 페치
- * 셋팅_검색결과 -> 검색 사가패치후 결과 저장
- */
+
 export const REQUEST_NEWS = 'home/REQUEST_NEWS';
 export const REQUEST_TOP_HEADLINE = 'home/REQUEST_TOP_HEADLINE';
 export const RESET = 'home/RESET';
@@ -13,10 +10,6 @@ export const SET_NEWS = 'home/SET_NEWS';
 export const SET_PAGE = 'home/SET_PAGE';
 export const SET_TOTAL_COUNT = 'home/SET_TOTAL_COUNT';
 
-/**
- * 리퀘스트 -> 검색
- * @param input : 검색창 인풋 값
- */
 type TRequestNews = {
   input?: string;
   page: number;
@@ -153,11 +146,7 @@ const home = (state = initState, action: HeaderAction): IHome => {
         draft.totalCount = action.payload as number;
         break;
       case RESET:
-        draft.newsList = initState.newsList;
-        draft.loading = initState.loading;
-        draft.totalCount = initState.totalCount;
-        draft.page = initState.page;
-        draft.searchInput = initState.searchInput;
+        draft = initState;
         break;
     }
   });

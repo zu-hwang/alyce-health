@@ -1,13 +1,15 @@
 import * as React from 'react';
 import * as css from 'styles/theme';
 import * as home from 'store/reducer/home';
+import * as bmk from 'store/reducer/bmk';
 import * as account from 'store/reducer/account';
 import styled from 'styled-components';
 import useInput from 'hooks/useInput';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'hooks/customRedux';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faBars, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faGrimace, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
 import LoginForm from 'components/LoginForm';
 import LogoutFormAndNav from 'components/LogoutFormAndNav';
 
@@ -25,37 +27,40 @@ const Header = () => {
   const onKeyPressInput = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter' && value.length > 0) submitSearch();
   };
-  const onClickSearchIcon = (): void => {
-    value.length > 0 && submitSearch();
+  const onClickIcon = (e: React.MouseEvent) => {
+    const mode = (e.currentTarget as HTMLElement).dataset.icon;
+    mode === 'grimace' && history.push('/');
+    mode === 'search' && submitSearch();
+    mode === 'bars' && setMenubar(true);
+    mode === 'window-minimize' && setMenubar(false);
   };
-  const onClickGoHome = (): void => {
-    history.push('/');
-  };
-  const onClickMenuIcon = (): void => {
-    setMenubar(!menubar); // menubar의 현재 state가 불리지 않음^^야홋!
-  };
-  const checkCurrentRef = (e: Event) => {
-    if (!menuRef.current?.contains(e.target as Node)) setMenubar(false);
-  };
+
   React.useEffect(() => {
+    const checkCurrentRef = (e: Event) =>
+      !menuRef.current?.contains(e.target as Node) && setMenubar(false);
     if (window && menubar)
       window.addEventListener('mousedown', checkCurrentRef);
     if (window && !menubar)
       window.removeEventListener('mousedown', checkCurrentRef);
+    return () => {
+      window.removeEventListener('mousedown', checkCurrentRef);
+    };
   }, [menubar]);
   React.useEffect(() => {
-    dispatch(account.loadLS());
-  }, [dispatch]);
+    dispatch(account.loadLSUser());
+    if (username) dispatch(bmk.loadLSBookmark(username));
+    // eslint-disable-next-line
+  }, [username]);
   return (
     <Container>
       <CenterBox>
         <MainLine>
           <IconWrapper hover={true}>
             {currentPath === '/' && (
-              <Icon icon={faSearch} size={'lg'} onClick={onClickSearchIcon} />
+              <Icon icon={faSearch} size={'lg'} onClick={onClickIcon} />
             )}
             {currentPath === '/bookmark' && (
-              <Icon icon={faHome} size={'lg'} onClick={onClickGoHome} />
+              <Icon icon={faGrimace} size={'2x'} onClick={onClickIcon} />
             )}
           </IconWrapper>
           {currentPath === '/' ? (
@@ -69,12 +74,13 @@ const Header = () => {
           ) : (
             <Title>{currentPath.slice(1)}</Title>
           )}
-          <IconWrapper
-            hover={true}
-            data-menuicon={'menuicon'}
-            onClick={onClickMenuIcon}
-          >
-            <Icon icon={faBars} size={'lg'} />
+          <IconWrapper hover={true}>
+            {menubar && (
+              <Icon icon={faWindowMinimize} size={'lg'} onClick={onClickIcon} />
+            )}
+            {!menubar && (
+              <Icon icon={faBars} size={'lg'} onClick={onClickIcon} />
+            )}
           </IconWrapper>
         </MainLine>
         <SubLine>
@@ -103,7 +109,6 @@ const CenterBox = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  /* justify-content: space-between; */
   width: ${({ theme }) => theme.unit.web + 'px'};
 `;
 const Title = styled.div`
@@ -132,12 +137,9 @@ const MainLine = styled.div`
   justify-content: space-between;
 `;
 const SubLine = styled.div`
-  /* visibility: hidden; */
   position: absolute;
   top: 0;
   right: 0;
-  z-index: -1;
-  /* border: 2px solid blue; */
 `;
 const IconWrapper = styled.div<{ hover?: boolean }>`
   ${css.flexCenter}
