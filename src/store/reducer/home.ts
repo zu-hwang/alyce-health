@@ -146,7 +146,11 @@ const home = (state = initState, action: HeaderAction): IHome => {
         draft.totalCount = action.payload as number;
         break;
       case RESET:
-        draft = initState;
+        draft.newsList = initState.newsList;
+        draft.loading = initState.loading;
+        draft.totalCount = initState.totalCount;
+        draft.page = initState.page;
+        draft.searchInput = initState.searchInput;
         break;
     }
   });

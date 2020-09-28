@@ -43,21 +43,23 @@ const NewsCard: React.FC<INewsCard> = ({ news, mode = 'none' }) => {
     const childNodes = (e.currentTarget as HTMLElement).childNodes;
     const mode = (childNodes[0] as HTMLElement).dataset.icon;
     if (id && editNewsId !== id) dispatch(bmk.setEditNewsId(id)); // 현재 뉴스 수정모드 적용
-    if (id && editNewsId === id && mode === 'paper-plane')
-      dispatch(bmk.updateBookmark({ username, id, title, description })),
-        dispatch(bmk.setEditNewsId('')); // 내용 저장 다스패치 실행 & 수정모드 종료
+    if (id && editNewsId === id && mode === 'paper-plane') {
+      dispatch(bmk.updateBookmark({ username, id, title, description }));
+      dispatch(bmk.setEditNewsId('')); // 내용 저장 다스패치 실행 & 수정모드 종료
+    }
   };
   const isEditMode = React.useMemo(() => {
     return mode === 'edit' && editNewsId === news.id;
   }, [mode, editNewsId, news.id]);
   React.useEffect(() => {
-    bookmark.forEach((bk) => bk.id === news.id && setIsBookmark(true));
+    bookmark.length > 0 &&
+      bookmark.forEach((bk) => bk.id === news.id && setIsBookmark(true));
   }, [bookmark, news]);
   React.useEffect(() => {
     articleRef.current?.clientHeight &&
       setArticleH(articleRef.current.clientHeight);
     imageRef.current?.clientHeight && setImgH(imageRef.current.clientHeight);
-  }, []);
+  }, [news.description]);
   return (
     <Container>
       <NewsBox>
@@ -218,6 +220,7 @@ const ActicleEditInput = styled.textarea<{ height: number }>`
   border: 0;
   background-color: ${({ theme }) => theme.divider};
   min-height: ${({ height }) => height + 'px'};
+  min-height: 37px;
   height: ${({ height }) => height + 'px'};
 `;
 const Origin = styled.div`
